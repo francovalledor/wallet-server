@@ -18,4 +18,26 @@ export class UserService {
   async findByEmail(email: string): Promise<User | undefined> {
     return this.userRepository.findOne({ where: { email } });
   }
+
+  async findById(userId: number): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { id: userId } });
+  }
+
+  async findUserWithBalance(
+    userId: number,
+  ): Promise<{ email: string; balance: number }> {
+    const user = await this.findById(userId);
+    if (!user) throw new Error('User not found');
+
+    const balance = await this.getBalance(userId);
+
+    return {
+      email: user.email,
+      balance,
+    };
+  }
+
+  private async getBalance(userId: number): Promise<number> {
+    return 100;
+  }
 }
