@@ -9,16 +9,15 @@ import { Transfer } from './transfer.entity';
 import { User } from './user.entity';
 import { Balance } from './balance.entity';
 import { TransferDto } from './transfer.dto';
+import { BalanceService } from './balance.service';
 
 @Injectable()
 export class TransferService {
   constructor(
     @InjectRepository(Transfer)
     private transferRepository: Repository<Transfer>,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-    @InjectRepository(Balance)
-    private balanceRepository: Repository<Balance>,
+
+    private readonly balanceService: BalanceService,
   ) {}
 
   async createTransfer(
@@ -61,6 +60,34 @@ export class TransferService {
           subject: subject ?? '',
         });
         return await entityManager.save(Transfer, transfer);
+      },
+    );
+  }
+
+  async modifyUserBalance(
+    user: User,
+    amount: number,
+    subject: string,
+  ): Promise<Transfer> {
+    return this.transferRepository.manager.transaction(
+      async (entityManager: EntityManager) => {
+        const userBalance = await this.balanceService.getBalance(user);
+
+        if (!userBalance) {
+          throw new NotFoundException('User balance not found');
+        }
+
+        userBalance.amount += amount;
+        await entityManager.save([userBalance]);
+
+        const transfer = entityManager.create(Transfer, {
+          from: { id: user.id },
+          to: { id: user.id },
+          amount,
+          subject,
+        });
+
+        return entityManager.save(Transfer, transfer);
       },
     );
   }

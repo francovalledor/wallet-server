@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { Balance } from './balance.entity';
+import { BalanceService } from './balance.service';
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,7 @@ export class UserService {
     private userRepository: Repository<User>,
     @InjectRepository(Balance)
     private balanceRepository: Repository<Balance>,
+    private balanceService: BalanceService,
   ) {}
 
   async create(userData: Partial<User>): Promise<User> {
@@ -39,17 +41,11 @@ export class UserService {
     const user = await this.findById(userId);
     if (!user) throw new Error('User not found');
 
-    const balance = await this.getBalance(user.id);
+    const balance = await this.balanceService.getBalance(user);
 
     return {
       email: user.email,
       balance: balance.amount,
     };
-  }
-
-  private async getBalance(userId: number): Promise<Balance> {
-    return this.balanceRepository.findOne({
-      where: { user: { id: userId } },
-    });
   }
 }
