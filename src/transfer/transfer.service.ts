@@ -51,6 +51,10 @@ export class TransferService {
           throw new BadRequestException('Insufficient balance');
         }
 
+        const fromUser = await entityManager.findOne(User, {
+          where: { id: fromUserId },
+        });
+
         const toUser = await entityManager.findOne(User, { where: { email } });
         if (!toUser) {
           throw new NotFoundException('Destination user not found');
@@ -69,11 +73,12 @@ export class TransferService {
         await entityManager.save([fromUserBalance, toUserBalance]);
 
         const transfer = entityManager.create(Transfer, {
-          from: { id: fromUserId },
+          from: fromUser,
           to: toUser,
           amount,
           subject: subject ?? '',
         });
+
         return await entityManager.save(Transfer, transfer);
       },
     );
