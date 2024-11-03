@@ -7,9 +7,10 @@ import { Order } from './order.entity';
 import { User } from 'src/user/user.entity';
 import { Balance } from 'src/user/balance.entity';
 import { UserModule } from 'src/user/user.module';
+import { TransferModule } from 'src/transfer/transfer.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Order]), UserModule],
+  imports: [TypeOrmModule.forFeature([Order]), UserModule, TransferModule],
   providers: [OrderService],
   controllers: [OrderController],
 })

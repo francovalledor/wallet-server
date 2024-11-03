@@ -10,11 +10,11 @@ import { Repository } from 'typeorm';
 import { CreateOrderDto } from './create-order.dto';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
-import { Transfer } from 'src/user/transfer.entity';
+import { Transfer } from 'src/transfer/transfer.entity';
 import { BalanceService } from 'src/user/balance.service';
-import { TransferService } from 'src/user/transfer.service';
 import { OrderResponseDto } from './order-response.dto';
 import { chain, isUndefined, keyBy, negate } from 'lodash';
+import { TransferService } from 'src/transfer/transfer.service';
 
 @Injectable()
 export class OrderService {

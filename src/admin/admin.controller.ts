@@ -1,11 +1,11 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { TransferService } from 'src/user/transfer.service';
 import { AdminBalanceDto } from './admin-balance.dto';
-import { Transfer } from 'src/user/transfer.entity';
+import { Transfer } from 'src/transfer/transfer.entity';
 import { UserService } from 'src/user/user.service';
 import { Balance } from 'src/user/balance.entity';
 import { BalanceService } from 'src/user/balance.service';
 import { User } from 'src/user/user.entity';
+import { TransferService } from 'src/transfer/transfer.service';
 
 @Controller('admin')
 export class AdminController {

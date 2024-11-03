@@ -1,6 +1,6 @@
 import { IsNumber, IsEmail, IsOptional, IsString, Min } from 'class-validator';
 
-export class TransferDto {
+export class CreateTransferDto {
   @IsNumber()
   @Min(0.1, { message: 'The transfer amount must be greater than 0' })
   amount: number;

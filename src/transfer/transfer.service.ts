@@ -4,12 +4,12 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Transfer } from 'src/transfer/transfer.entity';
+import { BalanceService } from 'src/user/balance.service';
 import { Repository, EntityManager } from 'typeorm';
-import { Transfer } from './transfer.entity';
-import { User } from './user.entity';
-import { Balance } from './balance.entity';
-import { TransferDto } from './transfer.dto';
-import { BalanceService } from './balance.service';
+import { CreateTransferDto } from './create-transfer.dto';
+import { Balance } from 'src/user/balance.entity';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class TransferService {
@@ -20,9 +20,24 @@ export class TransferService {
     private readonly balanceService: BalanceService,
   ) {}
 
+  async getUserTransfers(userId: number) {
+    return this.transferRepository.find({
+      where: [{ from: { id: userId } }, { to: { id: userId } }],
+      order: { createdAt: 'DESC' },
+      relations: ['from', 'to'],
+    });
+  }
+
+  async getTransferById(id: number) {
+    return this.transferRepository.findOne({
+      where: { id },
+      relations: ['from', 'to'],
+    });
+  }
+
   async createTransfer(
     fromUserId: number,
-    transferDto: TransferDto,
+    transferDto: CreateTransferDto,
   ): Promise<Transfer> {
     const { amount, email, subject } = transferDto;
 

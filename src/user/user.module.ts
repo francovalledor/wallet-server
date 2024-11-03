@@ -5,13 +5,13 @@ import { UserController } from './user.controller';
 import { User } from './user.entity';
 import { Balance } from './balance.entity';
 import { BalanceService } from './balance.service';
-import { TransferService } from './transfer.service';
-import { Transfer } from './transfer.entity';
+
+import { Transfer } from '../transfer/transfer.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Balance, Transfer])],
-  providers: [UserService, BalanceService, TransferService],
+  imports: [TypeOrmModule.forFeature([User, Balance, Transfer]), Transfer],
+  providers: [UserService, BalanceService],
   controllers: [UserController],
-  exports: [UserService, BalanceService, TransferService],
+  exports: [UserService, BalanceService],
 })
 export class UserModule {}

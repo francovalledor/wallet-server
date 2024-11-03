@@ -14,7 +14,7 @@ import { OrderService } from './order.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateOrderDto } from './create-order.dto';
 import { Order } from './order.entity';
-import { Transfer } from 'src/user/transfer.entity';
+import { Transfer } from 'src/transfer/transfer.entity';
 import { OrderResponseDto } from './order-response.dto';
 
 @UseGuards(JwtAuthGuard)
