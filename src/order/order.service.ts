@@ -40,7 +40,7 @@ export class OrderService {
       ? await this.userService.findByEmail(createOrderDto.recipientEmail)
       : null;
 
-    if (requester.id === recipient.id) {
+    if (requester.id === recipient?.id) {
       throw new BadRequestException('Cannot create an order to yourself');
     }
 
