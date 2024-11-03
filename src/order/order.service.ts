@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Order, OrderStatus } from './order.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -26,6 +30,22 @@ export class OrderService {
       recipientId: recipient?.id,
       status: OrderStatus.OPEN,
     });
+    return this.orderRepository.save(order);
+  }
+
+  async cancelOrder(orderId: number, userId: number): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: { id: orderId },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+    if (order.requesterId !== userId) {
+      throw new BadRequestException('Only the requester can cancel the order');
+    }
+
+    order.status = OrderStatus.CANCELLED;
     return this.orderRepository.save(order);
   }
 
