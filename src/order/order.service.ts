@@ -32,9 +32,17 @@ export class OrderService {
   }
 
   async createOrder(createOrderDto: CreateOrderDto & { requesterId: number }) {
+    const requester = await this.userService.findById(
+      createOrderDto.requesterId,
+    );
+
     const recipient: User | null | undefined = createOrderDto.recipientEmail
       ? await this.userService.findByEmail(createOrderDto.recipientEmail)
       : null;
+
+    if (requester.id === recipient.id) {
+      throw new BadRequestException('Cannot create an order to yourself');
+    }
 
     const order = this.orderRepository.create({
       ...createOrderDto,
