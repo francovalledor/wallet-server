@@ -7,9 +7,13 @@ import { Balance } from './balance.entity';
 import { BalanceService } from './balance.service';
 
 import { Transfer } from '../transfer/transfer.entity';
+import { UserPassword } from './user-password.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Balance, Transfer]), Transfer],
+  imports: [
+    TypeOrmModule.forFeature([User, UserPassword, Balance, Transfer]),
+    Transfer,
+  ],
   providers: [UserService, BalanceService],
   controllers: [UserController],
   exports: [UserService, BalanceService],

@@ -5,6 +5,9 @@ import { UserService } from '../user/user.service';
 import { RegisterDto } from './register.dto';
 import { LoginDto } from './login.dto';
 import { User } from 'src/user/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserPassword } from 'src/user/user-password.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +21,9 @@ export class AuthService {
 
     if (!user) return null;
 
-    if (await bcrypt.compare(loginData.password, user.password)) {
+    const storedPassword = await this.userService.getUserPassword(user);
+
+    if (await bcrypt.compare(loginData.password, storedPassword)) {
       return user;
     }
 
