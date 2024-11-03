@@ -28,4 +28,32 @@ export class OrderService {
     });
     return this.orderRepository.save(order);
   }
+
+  async findAll(userId: number, status?: string): Promise<Order[]> {
+    const queryBuilder = this.orderRepository
+      .createQueryBuilder('order')
+      .where('order.requesterId = :userId OR order.recipientId = :userId', {
+        userId,
+      });
+
+    if (status) {
+      queryBuilder.andWhere('order.status = :status', { status });
+    }
+
+    return queryBuilder
+      .orderBy('order.updatedAt', 'DESC')
+      .addOrderBy('order.createdAt', 'DESC')
+      .getMany();
+  }
+
+  async findOne(id: number, userId: number): Promise<Order> {
+    return this.orderRepository
+      .createQueryBuilder('order')
+      .where('order.id = :id', { id })
+      .andWhere(
+        '(order.requesterId = :userId OR order.recipientId = :userId OR order.recipientId IS NULL)',
+        { userId },
+      )
+      .getOne();
+  }
 }
