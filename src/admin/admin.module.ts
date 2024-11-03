@@ -10,8 +10,8 @@ import { UserService } from 'src/user/user.service';
 import { BalanceService } from 'src/user/balance.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Transfer, User, Balance])],
+  imports: [TypeOrmModule.forFeature([Transfer, User, Balance]), UserModule],
   controllers: [AdminController],
-  providers: [TransferService, UserService, BalanceService],
+  providers: [],
 })
 export class AdminModule {}

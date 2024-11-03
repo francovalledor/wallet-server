@@ -6,11 +6,12 @@ import { User } from './user.entity';
 import { Balance } from './balance.entity';
 import { BalanceService } from './balance.service';
 import { TransferService } from './transfer.service';
+import { Transfer } from './transfer.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Balance])],
-  providers: [UserService, BalanceService],
+  imports: [TypeOrmModule.forFeature([User, Balance, Transfer])],
+  providers: [UserService, BalanceService, TransferService],
   controllers: [UserController],
-  exports: [UserService],
+  exports: [UserService, BalanceService, TransferService],
 })
 export class UserModule {}
