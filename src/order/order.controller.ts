@@ -7,12 +7,14 @@ import {
   Get,
   Query,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateOrderDto } from './create-order.dto';
 import { Order } from './order.entity';
+import { Transfer } from 'src/user/transfer.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('orders')
@@ -42,5 +44,20 @@ export class OrderController {
   async getOrderById(@Request() req, @Param('id') id: number): Promise<Order> {
     const userId = req.user.userId;
     return this.orderService.findOne(id, userId);
+  }
+
+  @Patch(':id/cancel')
+  async cancelOrder(@Request() req, @Param('id') id: number): Promise<Order> {
+    const userId = req.user.userId;
+    return this.orderService.cancelOrder(id, userId);
+  }
+
+  @Patch(':id/complete')
+  async completeOrder(
+    @Request() req,
+    @Param('id') id: number,
+  ): Promise<Transfer> {
+    const userId = req.user.userId;
+    return this.orderService.completeOrder(id, userId);
   }
 }
