@@ -1,0 +1,413 @@
+{
+	"info": {
+		"_postman_id": "eebe3efd-4c88-4bc9-963b-c84b9d611ab3",
+		"name": "Wallet-server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7241398"
+	},
+	"item": [
+		{
+			"name": "Unprotected endpoints",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"{{auth.username}}\",\n  \"password\": \"{{auth.password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:3000/auth/login \\\n-H \"Content-Type: application/json\" \\\n-d '{\n  \"email\": \"usuario@example.com\",\n  \"password\": \"password123\"\n}'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"{{auth.username}}\",\n  \"password\": \"{{auth.password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:3000/auth/register \\\n-H \"Content-Type: application/json\" \\\n-d '{\n  \"email\": \"usuario@example.com\",\n  \"password\": \"password123\"\n}'\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Protected",
+			"item": [
+				{
+					"name": "orders",
+					"item": [
+						{
+							"name": "create order",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"amount\": 150,\n    \"subject\": \"Necesito platita\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/orders",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "orders",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/orders",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "order",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/orders/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"orders",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cancel",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/orders/:id/cancel",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"orders",
+										":id",
+										"cancel"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "complete",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/orders/:id/complete",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"orders",
+										":id",
+										"complete"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "profile",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <TOKEN_JWT>"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/user/profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET http://localhost:3000/user/profile \\\n-H \"Authorization: Bearer <TOKEN_JWT>\"\n"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.sendRequest({",
+							"  url: pm.environment.get(\"auth.url\"),",
+							"  method: \"POST\",",
+							"  header: {",
+							"    'Accept': 'application/json',",
+							"    'Content-Type': 'application/json'",
+							"   },",
+							"   body: {",
+							"    mode: \"raw\",",
+							"    raw: JSON.stringify({",
+							"        \"email\": pm.environment.get(\"auth.username\"),",
+							"        \"password\": pm.environment.get(\"auth.password\")  ",
+							"       })",
+							"    }",
+							"}, function (e, res) {",
+							"    console.log(res);",
+							"    pm.environment.set(\"access_token\", res.json().access_token);",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "modify balance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 4,\n    \"amount\": 1000,\n    \"subject\": \"Carga de saldo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/admin/modify-balance",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"admin",
+								"modify-balance"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
