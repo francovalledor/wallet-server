@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { Balance } from './balance.entity';
 import { BalanceService } from './balance.service';
@@ -33,6 +33,14 @@ export class UserService {
 
   async findById(userId: number): Promise<User | undefined> {
     return this.userRepository.findOne({ where: { id: userId } });
+  }
+
+  async findByIds(userIds: number[]): Promise<User[]> {
+    return this.userRepository.find({
+      where: {
+        id: In(userIds),
+      },
+    });
   }
 
   async findUserWithBalance(

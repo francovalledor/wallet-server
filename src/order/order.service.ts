@@ -13,6 +13,8 @@ import { User } from 'src/user/user.entity';
 import { Transfer } from 'src/user/transfer.entity';
 import { BalanceService } from 'src/user/balance.service';
 import { TransferService } from 'src/user/transfer.service';
+import { OrderResponseDto } from './order-response.dto';
+import { chain, isUndefined, keyBy, negate } from 'lodash';
 
 @Injectable()
 export class OrderService {
@@ -131,5 +133,34 @@ export class OrderService {
         { userId },
       )
       .getOne();
+  }
+
+  async toOrderResponseDtoList(orders: Order[]): Promise<OrderResponseDto[]> {
+    const userIds = chain(orders)
+      .map((o) => o.requesterId)
+      .concat(orders.map((o) => o.recipientId))
+      .filter(negate(isUndefined))
+      .uniq()
+      .value();
+
+    const users = await this.userService.findByIds(userIds);
+
+    const userById = keyBy(users, (u) => u.id);
+    const getEmail = (userId: number | undefined) =>
+      userById[userId]?.email ?? null;
+
+    return orders.map((order) => {
+      const { recipientId, requesterId, ...rest } = order;
+
+      return {
+        ...rest,
+        requesterEmail: getEmail(requesterId),
+        recipientEmail: getEmail(recipientId),
+      };
+    });
+  }
+
+  async toOrderResponseDto(order: Order): Promise<OrderResponseDto> {
+    return (await this.toOrderResponseDtoList([order]))[0];
   }
 }

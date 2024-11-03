@@ -15,6 +15,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateOrderDto } from './create-order.dto';
 import { Order } from './order.entity';
 import { Transfer } from 'src/user/transfer.entity';
+import { OrderResponseDto } from './order-response.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('orders')
@@ -35,21 +36,33 @@ export class OrderController {
   async getOrders(
     @Request() req,
     @Query('status') status?: string,
-  ): Promise<Order[]> {
+  ): Promise<OrderResponseDto[]> {
     const userId = req.user.userId;
-    return this.orderService.findAll(userId, status);
+    const orders = await this.orderService.findAll(userId, status);
+
+    return this.orderService.toOrderResponseDtoList(orders);
   }
 
   @Get(':id')
-  async getOrderById(@Request() req, @Param('id') id: number): Promise<Order> {
+  async getOrderById(
+    @Request() req,
+    @Param('id') id: number,
+  ): Promise<OrderResponseDto> {
     const userId = req.user.userId;
-    return this.orderService.findOne(id, userId);
+    const order = await this.orderService.findOne(id, userId);
+
+    return this.orderService.toOrderResponseDto(order);
   }
 
   @Patch(':id/cancel')
-  async cancelOrder(@Request() req, @Param('id') id: number): Promise<Order> {
+  async cancelOrder(
+    @Request() req,
+    @Param('id') id: number,
+  ): Promise<OrderResponseDto> {
     const userId = req.user.userId;
-    return this.orderService.cancelOrder(id, userId);
+    const order = await this.orderService.cancelOrder(id, userId);
+
+    return this.orderService.toOrderResponseDto(order);
   }
 
   @Patch(':id/complete')
